@@ -2,9 +2,9 @@ name: "CodeQL Advanced Analysis"
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: ["main"]
   pull_request:
-    branches: ["main", "develop"]
+    branches: ["main"]
   schedule:
     - cron: '32 3 * * 1' # Executa às 03:32 UTC todas as segundas-feiras
 
