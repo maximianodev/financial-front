@@ -4,8 +4,8 @@ import { authValidate } from './lib/auth'
 
 export async function middleware(request: NextRequest) {
   const cookieStore = await cookies()
-  const authoToken = cookieStore.get('Authorization') ?? null
-  const isAuthenticated = await authValidate(authoToken?.value)
+  const authToken = cookieStore.get('Authorization') ?? null
+  const isAuthenticated = await authValidate(authToken?.value)
 
   if (isAuthenticated.status !== 200) {
     return NextResponse.redirect(new URL('/login', request.url))
