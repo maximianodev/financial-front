@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
-const email = z
+export const zEmail = z
   .string()
   .email({ message: 'Por favor, insira um e-mail válido.' })
   .trim()
 
-const password = z
+export const zPassword = z
   .string()
   .min(8, { message: 'Deve ter pelo menos 8 caracteres.' })
   .regex(/[a-zA-Z]/, { message: 'Deve conter ao menos uma letra.' })
@@ -15,7 +15,7 @@ const password = z
   })
   .trim()
 
-export const SignupFormSchema = z.object({
-  email,
-  password,
+export const zSignupFormSchema = z.object({
+  email: zEmail,
+  password: zPassword,
 })

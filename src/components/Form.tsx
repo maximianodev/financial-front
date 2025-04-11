@@ -18,6 +18,8 @@ interface FormProps {
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void
   secondaryActionLabel?: string
   handleSecondaryAction?: () => void
+  errors?: string[]
+  successMessage?: string
 }
 
 export const Form = ({
@@ -26,13 +28,26 @@ export const Form = ({
   handleSubmit,
   handleSecondaryAction,
   secondaryActionLabel = '',
+  errors = [],
+  successMessage = '',
 }: FormProps) => {
   return (
     <form onSubmit={handleSubmit}>
       {fields.map((field) => (
         <Input key={field.id} className='not-first:mt-5' {...field} />
       ))}
-
+      {errors.length ? (
+        <div className='text-red-500 text-sm my-4 text-center'>
+          {errors.map((error, index) => (
+            <p key={index}>{error}</p>
+          ))}
+        </div>
+      ) : null}
+      {successMessage && (
+        <div className='text-green-500 text-sm my-4 text-center'>
+          {successMessage}
+        </div>
+      )}
       <div className='flex justify-between items-center mt-8'>
         {secondaryActionLabel && (
           <Button

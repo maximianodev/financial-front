@@ -17,6 +17,18 @@ const config = {
   },
 }
 
+export const forgotPassword = async (data: {
+  email: string
+}): Promise<LoginResponse> => {
+  return fetch(`${API_USERS}/forgot-password`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: config.headers,
+    body: JSON.stringify(data),
+  })
+    .then((resp) => resp.json())
+}
+
 export const login = async (data: {
   email: string
   password: string

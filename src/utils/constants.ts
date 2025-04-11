@@ -55,4 +55,4 @@ export const loginForm = {
   ],
 }
 
-export const STORAGE_KEY = 'userData'
+export const PROFILE_STORAGE_KEY = 'financial@userData'

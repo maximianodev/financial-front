@@ -1,17 +1,28 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
+
 import { authValidate } from './lib/auth'
 
-export async function middleware(request: NextRequest) {
-  const cookieStore = await cookies()
-  const authToken = cookieStore.get('Authorization') ?? null
+export async function middleware({
+  url,
+}: NextRequest): Promise<NextResponse<unknown>> {
+  const loginUrl = new URL('/login', url)
+  const { redirect, next } = NextResponse
+
+  const { get } = await cookies()
+  const authToken = get('Authorization') ?? null
+
+  if (!authToken?.value?.length) {
+    return redirect(loginUrl)
+  }
+
   const isAuthenticated = await authValidate(authToken?.value)
 
   if (isAuthenticated.status !== 200) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return redirect(loginUrl)
   }
-  
-  return NextResponse.next()
+
+  return next()
 }
 
 export const config = {
