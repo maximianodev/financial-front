@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Ubuntu } from 'next/font/google'
+import { Geist } from 'next/font/google'
 
 import '../styles/globals.css'
 
-const ubuntu = Ubuntu({
+const ubuntu = Geist({
   weight: ['400', '700'],
 })
 

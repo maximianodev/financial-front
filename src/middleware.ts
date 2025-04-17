@@ -3,14 +3,23 @@ import { cookies } from 'next/headers'
 
 import { authValidate } from './lib/auth'
 
-export async function middleware({
-  url,
-}: NextRequest): Promise<NextResponse<unknown>> {
-  const loginUrl = new URL('/login', url)
+export async function middleware(
+  request: NextRequest
+): Promise<NextResponse<unknown>> {
   const { redirect, next } = NextResponse
+  const {
+    nextUrl: { pathname, origin },
+  } = request
 
-  const { get } = await cookies()
-  const authToken = get('Authorization') ?? null
+  const cookie = await cookies()
+
+  if (pathname.startsWith('/auth')) {
+    cookie.delete('Authorization')
+    return next()
+  }
+
+  const loginUrl = new URL('/auth/sign-in', origin)
+  const authToken = cookie.get('Authorization') ?? null
 
   if (!authToken?.value?.length) {
     return redirect(loginUrl)
@@ -26,5 +35,5 @@ export async function middleware({
 }
 
 export const config = {
-  matcher: '/((?!api|_next/static|_next/image|favicon.ico|login).*)',
+  matcher: '/((?!api|_next/static|_next/image|favicon.ico).*)',
 }

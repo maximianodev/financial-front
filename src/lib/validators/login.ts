@@ -15,7 +15,7 @@ export const zPassword = z
   })
   .trim()
 
-export const zSignupFormSchema = z.object({
+export const zSignInFormSchema = z.object({
   email: zEmail,
   password: zPassword,
 })

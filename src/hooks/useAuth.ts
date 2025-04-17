@@ -1,13 +1,14 @@
+'use client'
+
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 
-import type { FormSteps } from '../app/login/form'
 import { saveToLocalStorage } from '../lib/localStorage'
-import { forgotPassword, login } from '../lib/auth'
+import { login } from '../lib/auth'
 import { formatFieldName } from '../utils/formatFieldName'
 import { PROFILE_STORAGE_KEY } from '../utils/constants'
-import { zEmail, zSignupFormSchema } from '../lib/validators/login'
+import { zSignInFormSchema } from '../lib/validators/login'
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false)
@@ -20,82 +21,45 @@ export const useAuth = () => {
     setSuccessMessage('')
   }
 
-  const validateFields = (
-    event: FormEvent<HTMLFormElement>,
-    type: FormSteps
-  ) => {
+  const validateFields = (event: FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget)
 
-    if (type === 'login') {
-      const { data, error } = zSignupFormSchema.safeParse({
-        email: formData?.get('email') ?? '',
-        password: formData?.get('password') ?? '',
-      })
+    const { data, error } = zSignInFormSchema.safeParse({
+      email: formData?.get('email') ?? '',
+      password: formData?.get('password') ?? '',
+    })
 
-      if (error) {
-        setErrors(
-          error.issues.map(
-            ({ path, message }) =>
-              `${formatFieldName(path?.toString())}: ${message}`
-          )
+    if (error) {
+      setErrors(
+        error.issues.map(
+          ({ path, message }) =>
+            `${formatFieldName(path?.toString())}: ${message}`
         )
-      }
-
-      return data
+      )
     }
 
-    if (type === 'forgot-password') {
-      const email = formData?.get('email') ?? ''
-      const { data, error } = zEmail.safeParse(email)
-
-      if (error) {
-        setErrors(
-          error.issues.map(
-            ({ path, message }) =>
-              `${formatFieldName(path?.toString())}: ${message}`
-          )
-        )
-      }
-
-      return data
-    }
+    return data
   }
 
-  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
     resetMessages()
     try {
-      const data = validateFields(event, 'login')
+      const data = validateFields(event)
 
       if (!data) {
-        throw new Error('Invalid data')
+        setErrors(['Não foi possível fazer login'])
+        return
       }
 
       const authentication = await login(
-        data as z.infer<typeof zSignupFormSchema>
+        data as z.infer<typeof zSignInFormSchema>
       )
       saveToLocalStorage(PROFILE_STORAGE_KEY, authentication.data)
       setSuccessMessage('Login realizado com sucesso!')
       push('/')
-    } catch {
+    } catch (error) {
+      console.error(error)
       setErrors(['Não foi possível fazer login'])
-    }
-  }
-
-  const handleForgotPassword = async (event: FormEvent<HTMLFormElement>) => {
-    resetMessages()
-    try {
-      const data = validateFields(event, 'forgot-password')
-
-      if (!data) {
-        throw new Error('Invalid data')
-      }
-
-      forgotPassword({ email: data as z.infer<typeof zEmail> })
-      setSuccessMessage(
-        'Um e-mail de recuperação foi enviado para o seu e-mail cadastrado!'
-      )
-    } catch {
-      setErrors(['Não foi possível enviar o e-mail de recuperação'])
     }
   }
 
@@ -105,8 +69,7 @@ export const useAuth = () => {
     errors,
     setErrors,
     setLoading,
-    handleLogin,
-    handleForgotPassword,
+    handleSignIn,
     resetMessages,
   }
 }

@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { ButtonHTMLAttributes } from 'react'
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string
-  styleType: 'primary' | 'secondary' | 'link'
+  styleType?: 'primary' | 'secondary' | 'link'
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -14,8 +14,8 @@ export const Button: React.FC<ButtonProps> = ({
   if (styleType === 'link') {
     return (
       <button
-        {...props}
         className={`font-bold cursor-pointer hover:underline ${className}`}
+        {...props}
       >
         {label}
       </button>
@@ -25,8 +25,8 @@ export const Button: React.FC<ButtonProps> = ({
   if (styleType === 'secondary') {
     return (
       <button
-        {...props}
         className={`border-1 text-white font-bold py-2 px-4 rounded cursor-pointer hover:opacity-85 ${className}`}
+        {...props}
       >
         {label}
       </button>
@@ -35,8 +35,8 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      {...props}
       className={`bg-white text-black font-bold py-2 px-4 rounded cursor-pointer hover:opacity-85 ${className}`}
+      {...props}
     >
       {label}
     </button>
