@@ -11,7 +11,7 @@ type Field = {
   required: boolean
 }
 
-interface FormProps {
+interface FormProps extends React.HTMLProps<HTMLFormElement> {
   fields: Field[]
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void
   className?: string

@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 
-import { authValidate } from './lib/auth'
+import { authValidate } from './lib/alfred/auth'
 
 export async function middleware(
   request: NextRequest

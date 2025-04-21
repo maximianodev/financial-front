@@ -29,11 +29,25 @@ export const forgotPassword = async (data: {
     .then((resp) => resp.json())
 }
 
-export const login = async (data: {
+export const signIn = async (data: {
   email: string
   password: string
 }): Promise<LoginResponse> => {
-  return fetch(`${API_USERS}/login`, {
+  return fetch(`${API_USERS}/sign-in`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: config.headers,
+    body: JSON.stringify(data),
+  })
+    .then((resp) => resp.json())
+    .catch((err) => console.error(err))
+}
+
+export const signUp = async (data: {
+  email: string
+  password: string
+}): Promise<LoginResponse> => {
+  return fetch(`${API_USERS}/sign-up`, {
     method: 'POST',
     credentials: 'include',
     headers: config.headers,

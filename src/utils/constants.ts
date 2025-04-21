@@ -1,5 +1,5 @@
-export const loginForm = {
-  login: [
+export const authForm = {
+  'sign-in': [
     {
       label: 'E-mail',
       placeholder: 'E-mail',
@@ -17,7 +17,7 @@ export const loginForm = {
       required: true,
     },
   ],
-  signup: [
+  'sign-up': [
     {
       label: 'Nome',
       placeholder: 'Nome',
@@ -43,7 +43,7 @@ export const loginForm = {
       required: true,
     },
   ],
-  forgotPassword: [
+  'forgot-password': [
     {
       label: 'E-mail',
       placeholder: 'E-mail',
